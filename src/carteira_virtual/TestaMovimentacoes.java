@@ -2,13 +2,15 @@ package carteira_virtual;
 
 import java.util.Scanner;
 
-
 public class TestaMovimentacoes{
 
 	public static void main(String[] args) {
 		
 		int opcaoEntrada = 0;
+		
+		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
+		
 		do{
 			System.out.println("Bem vindo à carteira virtual!");
 			
@@ -40,6 +42,7 @@ public class TestaMovimentacoes{
 				
 				break;
 			}
+			
 		}while(opcaoEntrada != 3);
 	}
 }

@@ -10,7 +10,9 @@ public interface UsuarioService{
 	
 	public static void cadastrarUsuario(){
 
+		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
+		
 		Usuario novoUsuario = new Usuario();
 		Carteira novaCarteira = new Carteira();
 		
@@ -26,6 +28,9 @@ public interface UsuarioService{
 		
 		System.out.println("CPF: ");
 		novoUsuario.setCpf(sc.nextLine());
+		
+		System.out.println("Senha: ");
+		novoUsuario.setSenha(sc.nextLine());
 		
 		System.out.println("Informe seu saldo inicial: ");
 		novaCarteira.setSaldo(sc.nextDouble());
@@ -48,50 +53,41 @@ public interface UsuarioService{
 
 		System.out.println("Tecle enter para continuar...");
 		sc.nextLine();
+	}
+	
+	public static void fazLogin(){
 		
-//		System.out.println("Usuario cadastrado com sucesso!");
-//		System.out.println("Usuário: " + novoUsuario.getNome() + " " + novoUsuario.getSobrenome());
-//		System.out.println("Cpf: " + novoUsuario.getCpf());
-//		
-//		System.out.println("Dono da carteira: " + novaCarteira.getTitular().getNome());
-//		System.out.println("Saldo da carteira: " + novaCarteira.getSaldo());
-
-	}
-	
-	public static void buscaSaldo(){
-
-		for (Usuario usuario : listaUsuarios) {
-			System.out.println(usuario.getId() + " - "+ usuario.getNome() + " " + usuario.getSobrenome() +  " " + usuario.getCarteira().getSaldo() );
-		}
-	}
-	
-	public static void deposita(){
 		
+		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
-
+		
+		System.out.println("----------------------------");
+		System.out.println("            LOGIN           ");
+		System.out.println("----------------------------");
+		
+		System.out.println("Cpf: ");
+		String verificaCpf = sc.nextLine();
+		System.out.println("Senha: ");
+		String verificaSenha = sc.nextLine();
+		
 		for (Usuario usuario : listaUsuarios) {
-			System.out.println("Informe o valor que deseja depositar: ");
-			double valor = sc.nextDouble();
-			usuario.getCarteira().setSaldo(usuario.getCarteira().getSaldo() + valor);
-			System.out.println(usuario.getId() + " - "+ usuario.getNome() + " " + usuario.getSobrenome() +  " " + usuario.getCarteira().getSaldo() );
+			if(verificaCpf.equals(usuario.getCpf()) && verificaSenha.equals(usuario.getSenha())){
+				menuUsuarioLogado();
+			} else{
+				System.out.println("Usuário ou senha Inválidos!");
+			}
 		}
-	}
-	
-	public static void saca(){
-		Scanner sc = new Scanner(System.in);
-
-		for (Usuario usuario : listaUsuarios) {
-			System.out.println("Informe o valor que deseja sacar: ");
-			double valor = sc.nextDouble();
-			usuario.getCarteira().setSaldo(usuario.getCarteira().getSaldo() - valor);
-			System.out.println(usuario.getId() + " - "+ usuario.getNome() + " " + usuario.getSobrenome() +  " " + usuario.getCarteira().getSaldo() );
-		}
+		
+		sc.nextLine();
 	}
 	
 	public static void menuUsuarioLogado(){
 		
 		int opcao = 0;
+		
+		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
+		
 		boolean usuarioLogado = true;
 		
 		do{
@@ -122,22 +118,12 @@ public interface UsuarioService{
 		}while(opcao != 3);
 	}
 	
-	public static void fazLogin(){
-		Scanner sc = new Scanner(System.in);
-		
-		System.out.println("----------------------------");
-		System.out.println("            LOGIN           ");
-		System.out.println("----------------------------");
-		
-		System.out.println("Cpf: ");
-		
-		System.out.println("Senha: ");
-		sc.nextLine();
-	}
-	
 	public static void realizaOperacao(){
 		int operacao = 0;
+		
+		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
+		
 		do{
 			System.out.println("Informe a operação desejada.");
 			System.out.println("1 - Saque");
@@ -165,5 +151,42 @@ public interface UsuarioService{
 				break;
 			}
 		}while(operacao != 4);
+	}
+	
+	public static void buscaSaldo(){
+
+		for (Usuario usuario : listaUsuarios) {
+			System.out.println(usuario.getId() + " - "+ usuario.getNome() + " " + usuario.getSobrenome() +  " " + usuario.getCarteira().getSaldo() );
+		}
+	}
+	
+	public static void deposita(){
+		
+		@SuppressWarnings("resource")
+		Scanner sc = new Scanner(System.in);
+
+		for (Usuario usuario : listaUsuarios) {
+			System.out.println("Informe o valor que deseja depositar: ");
+			double valor = sc.nextDouble();
+			usuario.getCarteira().setSaldo(usuario.getCarteira().getSaldo() + valor);
+			System.out.println(usuario.getId() + " - "+ usuario.getNome() + " " + usuario.getSobrenome() +  " " + usuario.getCarteira().getSaldo() );
+		}
+	}
+	
+	public static void saca(){
+		
+		@SuppressWarnings("resource")
+		Scanner sc = new Scanner(System.in);
+
+		for (Usuario usuario : listaUsuarios) {
+			System.out.println("Informe o valor que deseja sacar: ");
+			double valor = sc.nextDouble();
+			if(usuario.getCarteira().getSaldo() >= valor){
+				usuario.getCarteira().setSaldo(usuario.getCarteira().getSaldo() - valor);
+				System.out.println(usuario.getId() + " - "+ usuario.getNome() + " " + usuario.getSobrenome() +  " " + usuario.getCarteira().getSaldo() );
+			} else{
+				System.out.println("Saldo insuficiente.");
+			}
+		}
 	}
 }

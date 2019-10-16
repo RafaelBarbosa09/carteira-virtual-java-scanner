@@ -7,29 +7,6 @@ public class Carteira{
 	private double salario;
 	private Usuario usuario;
 	
-
-	public void saca(double valor){
-		if(this.saldo < valor){
-			System.out.println("Saldo insuficiente");
-		} else{
-			double novoSaldo = this.saldo - valor;
-			this.saldo = novoSaldo;
-		}
-	}
-	
-	public void deposita(double valor){
-		this.saldo += valor;
-	}
-
-	public void transferePara(Carteira destino, double valor){
-		if(this.saldo < valor){
-			System.out.println("Saldo insuficiente");
-		} else{
-			this.saca(valor);
-			destino.deposita(valor);
-		}
-	}
-	
 	public double getSaldo() {
 		return saldo;
 	}

@@ -1,7 +1,5 @@
 package carteira_virtual;
 
-import java.util.Scanner;
-
 public class Usuario implements UsuarioService{
 
 	private int id;
