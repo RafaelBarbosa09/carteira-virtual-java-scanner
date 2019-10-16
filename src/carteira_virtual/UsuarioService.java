@@ -8,6 +8,9 @@ public interface UsuarioService{
 
 	public static List<Usuario> listaUsuarios = new ArrayList<Usuario>();
 	
+	List<Double> listaSaque = new ArrayList<Double>();
+	List<Double> listaDeposito = new ArrayList<Double>();
+	
 	public static void cadastrarUsuario(){
 
 		@SuppressWarnings("resource")
@@ -16,9 +19,7 @@ public interface UsuarioService{
 		Usuario novoUsuario = new Usuario();
 		Carteira novaCarteira = new Carteira();
 		
-		System.out.println("----------------------------");
-		System.out.println("      CADASTRAR USUÁRIO     ");
-		System.out.println("----------------------------");
+		System.out.println("--------------CADASTRAR USUÁRIO-------------");
 		
 		System.out.println("Nome: ");
 		novoUsuario.setNome(sc.nextLine());
@@ -44,15 +45,14 @@ public interface UsuarioService{
 		novoUsuario.setId(idUsuario);
 		
 		for (Usuario usuario : listaUsuarios) {
+			System.out.println("Usuário cadastrado com sucesso!");
 			System.out.println("Id: " + usuario.getId());
-			System.out.println("Nome Completo: " + usuario.getNome() + usuario.getSobrenome());
+			System.out.println("Nome Completo: " + usuario.getNome() + " " + usuario.getSobrenome());
 			System.out.println("Cpf: " + usuario.getCpf());
-			System.out.println("Saldo: " + novaCarteira.getSaldo());
+			System.out.println("Saldo Atual: " + usuario.getCarteira().getSaldo() + "(s)");
 			System.out.println();
 		}
-
-		System.out.println("Tecle enter para continuar...");
-		sc.nextLine();
+		
 	}
 	
 	public static void fazLogin(){
@@ -61,10 +61,7 @@ public interface UsuarioService{
 		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
 		
-		System.out.println("----------------------------");
-		System.out.println("            LOGIN           ");
-		System.out.println("----------------------------");
-		
+		System.out.println("--------------LOGIN-------------");
 		System.out.println("Cpf: ");
 		String verificaCpf = sc.nextLine();
 		System.out.println("Senha: ");
@@ -73,12 +70,9 @@ public interface UsuarioService{
 		for (Usuario usuario : listaUsuarios) {
 			if(verificaCpf.equals(usuario.getCpf()) && verificaSenha.equals(usuario.getSenha())){
 				menuUsuarioLogado();
-			} else{
-				System.out.println("Usuário ou senha Inválidos!");
-			}
+			} 
 		}
-		
-		sc.nextLine();
+			System.out.println("Usuário ou senha Inválidos!");
 	}
 	
 	public static void menuUsuarioLogado(){
@@ -106,7 +100,7 @@ public interface UsuarioService{
 					realizaOperacao();
 					break;
 				case 3:
-					System.out.println("Saindo...");
+					System.out.println("");
 					break;
 				default:
 					System.out.println("Insira uma opção válida!");
@@ -129,7 +123,7 @@ public interface UsuarioService{
 			System.out.println("1 - Saque");
 			System.out.println("2 - Depósito");
 			System.out.println("3 - movimentações");
-			System.out.println("4 - sair");
+			System.out.println("4 - voltar");
 			operacao = sc.nextInt();
 			
 			switch (operacao) {
@@ -140,10 +134,10 @@ public interface UsuarioService{
 				deposita();
 				break;
 			case 3:
-				System.out.println("Realizando movimentação...");
+				exibeMovimentacoes();
 				break;
 			case 4:
-				System.out.println("Saindo...");
+				System.out.println("");
 				break;
 
 			default:
@@ -156,7 +150,7 @@ public interface UsuarioService{
 	public static void buscaSaldo(){
 
 		for (Usuario usuario : listaUsuarios) {
-			System.out.println(usuario.getId() + " - "+ usuario.getNome() + " " + usuario.getSobrenome() +  " " + usuario.getCarteira().getSaldo() );
+			System.out.println("Saldo Atual: " + usuario.getCarteira().getSaldo() + "(s)");
 		}
 	}
 	
@@ -169,7 +163,8 @@ public interface UsuarioService{
 			System.out.println("Informe o valor que deseja depositar: ");
 			double valor = sc.nextDouble();
 			usuario.getCarteira().setSaldo(usuario.getCarteira().getSaldo() + valor);
-			System.out.println(usuario.getId() + " - "+ usuario.getNome() + " " + usuario.getSobrenome() +  " " + usuario.getCarteira().getSaldo() );
+			System.out.println("Depósito realizado no valor de: R$" + valor );
+			listaDeposito.add(valor);
 		}
 	}
 	
@@ -179,14 +174,28 @@ public interface UsuarioService{
 		Scanner sc = new Scanner(System.in);
 
 		for (Usuario usuario : listaUsuarios) {
-			System.out.println("Informe o valor que deseja sacar: ");
+			System.out.println("Informe o valor que deseja sacar:");
 			double valor = sc.nextDouble();
 			if(usuario.getCarteira().getSaldo() >= valor){
 				usuario.getCarteira().setSaldo(usuario.getCarteira().getSaldo() - valor);
-				System.out.println(usuario.getId() + " - "+ usuario.getNome() + " " + usuario.getSobrenome() +  " " + usuario.getCarteira().getSaldo() );
+				System.out.println("Saque realizado no valor de: R$" + valor);
+				listaSaque.add(valor);
 			} else{
 				System.out.println("Saldo insuficiente.");
 			}
+		}
+	}
+	
+	public static void exibeMovimentacoes(){
+
+		for (Double valorDeposito : listaDeposito) {
+				System.out.println("Depósito:                    " + valorDeposito + "(+)");
+		}
+		for (Double valorSaque : listaSaque) {
+			System.out.println("Saque:                       " + valorSaque + "(-)");
+		}
+		for (Usuario usuario : listaUsuarios) {
+			System.out.println("Saldo Atual:                 " + usuario.getCarteira().getSaldo() + "(s)");
 		}
 	}
 }
