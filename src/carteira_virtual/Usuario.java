@@ -1,6 +1,6 @@
 package carteira_virtual;
 
-public class Usuario implements UsuarioService{
+public class Usuario {
 
 	private int id;
 	private String nome;
